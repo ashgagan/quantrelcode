@@ -12,6 +12,7 @@ import { Logger } from "./services/logging/Logger"
 import "./utils/path" // necessary to have access to String.prototype.toPosix
 
 import { HostProvider } from "@/hosts/host-provider"
+import { ShowMessageType } from "@/shared/proto/host/window"
 import { FileContextTracker } from "./core/context/context-tracking/FileContextTracker"
 import { StateManager } from "./core/storage/StateManager"
 import { ExtensionRegistryInfo } from "./registry"
@@ -20,10 +21,29 @@ import { audioRecordingService } from "./services/dictation/AudioRecordingServic
 import { ErrorService } from "./services/error"
 import { featureFlagsService } from "./services/feature-flags"
 import { initializeDistinctId } from "./services/logging/distinctId"
+import { QuantrelAuthService, QuantrelStatusBar } from "./services/quantrel"
 import { telemetryService } from "./services/telemetry"
 import { PostHogClientProvider } from "./services/telemetry/providers/posthog/PostHogClientProvider"
-import { ShowMessageType } from "./shared/proto/host/window"
 import { getLatestAnnouncementId } from "./utils/announcements"
+
+// Global Quantrel service instances
+let quantrelAuthService: QuantrelAuthService | undefined
+let quantrelStatusBar: QuantrelStatusBar | undefined
+
+/**
+ * Get the global Quantrel auth service instance
+ */
+export function getQuantrelAuthService(): QuantrelAuthService | undefined {
+	return quantrelAuthService
+}
+
+/**
+ * Get the global Quantrel status bar instance
+ */
+export function getQuantrelStatusBar(): QuantrelStatusBar | undefined {
+	return quantrelStatusBar
+}
+
 /**
  * Performs intialization for Cline that is common to all platforms.
  *
@@ -39,6 +59,24 @@ export async function initialize(context: vscode.ExtensionContext): Promise<Webv
 			type: ShowMessageType.ERROR,
 			message: "Failed to initialize Cline's application state. Please restart the extension.",
 		})
+	}
+
+	// Initialize Quantrel authentication service
+	try {
+		const baseUrl = StateManager.get().getGlobalSettingsKey("quantrelBaseUrl") || "http://localhost:8080"
+		quantrelAuthService = new QuantrelAuthService(StateManager.get(), baseUrl)
+		const isAuthenticated = await quantrelAuthService.initialize()
+
+		// Initialize status bar
+		quantrelStatusBar = new QuantrelStatusBar(StateManager.get(), quantrelAuthService)
+
+		if (isAuthenticated) {
+			Logger.log("Quantrel: Authenticated successfully")
+		} else {
+			Logger.log("Quantrel: Not authenticated - user will need to login")
+		}
+	} catch (error) {
+		Logger.error("Quantrel: Failed to initialize authentication service", error)
 	}
 
 	// Set the distinct ID for logging and telemetry
@@ -133,6 +171,16 @@ async function showVersionUpdateAnnouncement(context: vscode.ExtensionContext) {
 export async function tearDown(): Promise<void> {
 	// Clean up audio recording service to ensure no orphaned processes
 	audioRecordingService.cleanup()
+
+	// Clean up Quantrel services
+	if (quantrelStatusBar) {
+		quantrelStatusBar.dispose()
+		quantrelStatusBar = undefined
+	}
+	if (quantrelAuthService) {
+		quantrelAuthService.dispose()
+		quantrelAuthService = undefined
+	}
 
 	PostHogClientProvider.getInstance().dispose()
 	telemetryService.dispose()
