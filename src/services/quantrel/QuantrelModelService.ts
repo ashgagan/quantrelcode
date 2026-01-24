@@ -14,7 +14,7 @@ export class QuantrelModelService {
 
 	constructor(stateManager: StateManager, baseUrl?: string) {
 		this.stateManager = stateManager
-		this.baseUrl = baseUrl || "http://localhost:8080"
+		this.baseUrl = baseUrl || "https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io"
 	}
 
 	/**

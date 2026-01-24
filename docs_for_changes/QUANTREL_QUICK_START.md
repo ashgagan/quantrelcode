@@ -17,7 +17,7 @@ eyJraWQiOiJmYjUxODViZC05MjAyLTQ4OTItYWY5Yy03YTY5NjM2MzYzMTIiLCJhbGciOiJSUzI1NiJ9
    - Act Mode API Provider: `quantrel`
 4. **Configure Quantrel:**
    - Click "Configure Quantrel Settings"
-   - Set Base URL: `http://localhost:8080` (or your backend URL)
+   - Set Base URL: `https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io` (or your backend URL)
    - Set Model ID: `anthropic/claude-3-5-sonnet` (or any model from `/api/agents/coding`)
 
 5. **Set Token** (via Command Palette):
@@ -51,7 +51,7 @@ Press `Cmd+Shift+P` → `Preferences: Open User Settings (JSON)` and add:
 {
   "cline.planModeApiProvider": "quantrel",
   "cline.actModeApiProvider": "quantrel",
-  "cline.quantrelBaseUrl": "http://localhost:8080",
+  "cline.quantrelBaseUrl": "https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io",
   "cline.planModeQuantrelModelId": "anthropic/claude-3-5-sonnet",
   "cline.actModeQuantrelModelId": "anthropic/claude-3-5-sonnet"
 }
@@ -131,7 +131,7 @@ Refactor this code to make it more maintainable
 **Error:** `Quantrel API error (500): ...`
 
 **Solution:**
-1. Check backend is running: `curl http://localhost:8080/api/agents/coding`
+1. Check backend is running: `curl https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io/api/agents/coding`
 2. Verify the base URL in settings matches your backend
 3. Check backend logs for errors
 
@@ -140,7 +140,7 @@ Refactor this code to make it more maintainable
 **Error:** `Model not found`
 
 **Solution:**
-1. Fetch available models: `curl http://localhost:8080/api/agents/coding -H "Authorization: Bearer YOUR_TOKEN"`
+1. Fetch available models: `curl https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io/api/agents/coding -H "Authorization: Bearer YOUR_TOKEN"`
 2. Use a valid `modelId` from the response
 3. Update settings with correct model ID
 

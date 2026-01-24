@@ -57,7 +57,7 @@ We've successfully implemented the complete Quantrel authentication system for C
 6. **`src/shared/storage/state-keys.ts`**
    - Added `quantrelAccessToken` to `Secrets` interface
    - Added `quantrelRefreshToken` to `Secrets` interface
-   - Added `quantrelBaseUrl` to `Settings` interface (default: `http://localhost:8080`)
+   - Added `quantrelBaseUrl` to `Settings` interface (default: `https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io`)
    - Added `quantrelUserEmail` to `Settings` interface
 
 ### Extension Initialization

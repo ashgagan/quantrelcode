@@ -18,7 +18,9 @@ export async function diagnoseQuantrelSetup(stateManager: StateManager): Promise
 	console.log("✅ Access token found:", accessToken.substring(0, 20) + "...")
 
 	// Check 2: Backend URL
-	const baseUrl = stateManager.getGlobalSettingsKey("quantrelBaseUrl") || "http://localhost:8080"
+	const baseUrl =
+		stateManager.getGlobalSettingsKey("quantrelBaseUrl") ||
+		"https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io"
 	console.log("✅ Backend URL:", baseUrl)
 
 	// Check 3: User Info

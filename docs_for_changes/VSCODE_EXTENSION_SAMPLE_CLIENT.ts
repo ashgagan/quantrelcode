@@ -8,7 +8,7 @@
 // import * as vscode from 'vscode';
 
 // // Configuration
-// const API_BASE_URL = 'http://localhost:8080/api';
+// const API_BASE_URL = 'https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io/api';
 
 // // ============================================================================
 // // 1. AUTHENTICATION SERVICE

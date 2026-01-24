@@ -109,8 +109,8 @@ Quantrel: Not authenticated - user will need to login
 
 **Issue:** "Login failed: Network error"
 - **Cause:** Backend not running or wrong URL
-- **Fix:** Check `quantrelBaseUrl` setting (default: http://localhost:8080)
-- **Fix:** Verify backend is running: `curl http://localhost:8080/api/agents`
+- **Fix:** Check `quantrelBaseUrl` setting (default: https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io)
+- **Fix:** Verify backend is running: `curl https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io/api/agents`
 
 **Issue:** "Session expired. Please login again"
 - **Cause:** Token expired or invalid
@@ -214,7 +214,7 @@ Phase 1 is working correctly if:
 ## 📞 Need Help?
 
 **Backend Issues:**
-- Verify backend is running: `curl http://localhost:8080/api/agents`
+- Verify backend is running: `curl https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io/api/agents`
 - Check backend logs for errors
 
 **Extension Issues:**

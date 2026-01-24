@@ -96,7 +96,7 @@ await context.secrets.store("quantrelAccessToken", "your-jwt-token")
 
 ### 3. Configure Base URL (Optional)
 
-Default: `http://localhost:8080`
+Default: `https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io`
 
 To use a different backend:
 ```json

@@ -46,9 +46,12 @@ export const QuantrelProvider = ({ showModelOptions, isPopup, currentMode }: Qua
 				<VSCodeTextField
 					id="quantrel-base-url"
 					onInput={(e: any) => handleFieldChange("quantrelBaseUrl", e.target.value)}
-					placeholder="http://localhost:8080"
+					placeholder="https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io"
 					style={{ width: "100%" }}
-					value={apiConfiguration?.quantrelBaseUrl || "http://localhost:8080"}
+					value={
+						apiConfiguration?.quantrelBaseUrl ||
+						"https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io"
+					}
 				/>
 			</div>
 

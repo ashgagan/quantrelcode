@@ -28,7 +28,7 @@ import * as vscode from 'vscode';
 export class QuantrelAuthService {
     private context: vscode.ExtensionContext;
     private token: string | undefined;
-    private readonly API_BASE_URL = 'http://localhost:8080/api';
+    private readonly API_BASE_URL = 'https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io/api';
 
     constructor(context: vscode.ExtensionContext) {
         this.context = context;
@@ -94,7 +94,7 @@ Create a webview panel with:
 ```json
 "quantrel.baseUrl": {
   "type": "string",
-  "default": "http://localhost:8080",
+  "default": "https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io",
   "description": "Quantrel API base URL"
 }
 ```
@@ -166,7 +166,7 @@ export class QuantrelHandler implements ApiHandler {
 
     constructor(options: ApiHandlerOptions) {
         this.authService = options.authService;
-        this.baseUrl = options.baseUrl || 'http://localhost:8080/api';
+        this.baseUrl = options.baseUrl || 'https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io/api';
     }
 
     async *createMessage(systemPrompt: string, messages: any[]): AsyncGenerator<ApiStreamChunk> {
@@ -349,7 +349,7 @@ export class QuantrelModelService {
 
     constructor(authService: QuantrelAuthService) {
         this.authService = authService;
-        this.baseUrl = vscode.workspace.getConfiguration('quantrel').get('baseUrl', 'http://localhost:8080');
+        this.baseUrl = vscode.workspace.getConfiguration('quantrel').get('baseUrl', 'https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io');
     }
 
     async fetchModels(): Promise<QuantrelModel[]> {
@@ -539,7 +539,7 @@ private async *parseSSEStream(response: Response): AsyncGenerator<ApiStreamChunk
 {
   "quantrel.baseUrl": {
     "type": "string",
-    "default": "http://localhost:8080",
+    "default": "https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io",
     "description": "Quantrel API base URL",
     "order": 0
   },

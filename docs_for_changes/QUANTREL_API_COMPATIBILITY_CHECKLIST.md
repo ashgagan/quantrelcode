@@ -9,7 +9,7 @@ Run these checks against your Quantrel backend to determine the best integration
 **Test:** Can Quantrel accept requests in Anthropic's format?
 
 ```bash
-curl -X POST http://localhost:8080/api/... \
+curl -X POST https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io/api/... \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -83,7 +83,7 @@ data: {"type":"message_stop"}
 **Test:** Does Quantrel support Claude's tool use format?
 
 ```bash
-curl -X POST http://localhost:8080/api/... \
+curl -X POST https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io/api/... \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
@@ -129,7 +129,7 @@ curl -X POST http://localhost:8080/api/... \
 **Test:** Can Quantrel handle image inputs?
 
 ```bash
-curl -X POST http://localhost:8080/api/... \
+curl -X POST https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io/api/... \
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{

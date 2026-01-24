@@ -35,7 +35,7 @@ export class QuantrelAuthService {
 
 	constructor(stateManager: StateManager, baseUrl?: string) {
 		this.stateManager = stateManager
-		this.baseUrl = baseUrl || "http://localhost:8080"
+		this.baseUrl = baseUrl || "https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io"
 	}
 
 	/**
@@ -67,7 +67,15 @@ export class QuantrelAuthService {
 	 */
 	async login(email: string, password: string): Promise<{ success: boolean; error?: string }> {
 		try {
-			const response = await fetch(`${this.baseUrl}/api/auth/login`, {
+			const loginUrl = `${this.baseUrl}/api/auth/login`
+			console.log("[QuantrelAuth] Attempting login to:", loginUrl)
+			console.log("[QuantrelAuth] Request details:", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				bodyPreview: { email, password: "***" },
+			})
+
+			const response = await fetch(loginUrl, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -75,8 +83,12 @@ export class QuantrelAuthService {
 				body: JSON.stringify({ email, password }),
 			})
 
+			console.log("[QuantrelAuth] Response status:", response.status)
+			console.log("[QuantrelAuth] Response URL:", response.url)
+
 			if (!response.ok) {
 				const error = await response.text()
+				console.error("[QuantrelAuth] Login failed:", error)
 				return { success: false, error: `Login failed: ${error}` }
 			}
 

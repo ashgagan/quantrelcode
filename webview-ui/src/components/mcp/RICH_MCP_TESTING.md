@@ -59,10 +59,10 @@ Broken & Weird Edge Cases
 
 https://tectum.io/blog/dex-tools/
 http://0.0.0.0:8025/img.png
-https://localhost:8080/img.jpg
-http://localhost:8080/
+https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io/img.jpg
+https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io/
 https://localhost/
-http://httpbin.org/#/ 
+http://httpbin.org/#/
 https://snthonstcrgrfonhenth.com/nthshtf
 http://domain/.well-known/acme-challenge/token
 https://<strong>dextools</strong>.apiable.io/(Only

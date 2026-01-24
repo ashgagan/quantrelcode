@@ -181,12 +181,25 @@ export class QuantrelHandler implements ApiHandler {
 
 	@withRetry()
 	async *createMessage(systemPrompt: string, messages: ClineStorageMessage[], tools?: ClineTool[]): ApiStream {
+		console.log("[QuantrelHandler] createMessage called with options:", {
+			hasAccessToken: !!this.options.quantrelAccessToken,
+			tokenLength: this.options.quantrelAccessToken?.length,
+			tokenPreview: this.options.quantrelAccessToken ? `${this.options.quantrelAccessToken.substring(0, 20)}...` : "NONE",
+			baseUrl: this.options.quantrelBaseUrl,
+			userId: this.options.quantrelUserId,
+			modelId: this.options.quantrelModelId,
+		})
+
 		if (!this.options.quantrelAccessToken) {
 			throw new Error("Quantrel access token is required")
 		}
 
-		const baseUrl = this.options.quantrelBaseUrl || "http://localhost:8080"
+		const baseUrl =
+			this.options.quantrelBaseUrl || "https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io"
 		const request = this.transformMessages(systemPrompt, messages, tools)
+
+		console.log("[QuantrelHandler] Making request to:", `${baseUrl}/api/agent/complete`)
+		console.log("[QuantrelHandler] Request body:", JSON.stringify(request, null, 2))
 
 		this.abortController = new AbortController()
 

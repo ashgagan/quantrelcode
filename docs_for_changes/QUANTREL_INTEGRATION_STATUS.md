@@ -21,7 +21,7 @@ The Quantrel integration is now fully implemented and ready for end-to-end testi
 
 ### 3. Provider UI ✅
 - **Settings Integration**: Quantrel appears as a provider option
-- **Backend URL Config**: Configurable backend URL (default: http://localhost:8080)
+- **Backend URL Config**: Configurable backend URL (default: https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io)
 - **Model ID Display**: Shows currently selected model
 - **Marketplace Button**: Opens model selection quick-pick
 
@@ -85,7 +85,7 @@ Expected output:
 === Quantrel Diagnostic Check ===
 
 ✅ Access token found: eyJhbGciOiJIUzI1NiIs...
-✅ Backend URL: http://localhost:8080
+✅ Backend URL: https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io
 ✅ User ID: 123
 ✅ User Email: user@example.com
 
@@ -175,7 +175,7 @@ Display in Chat
 ## Troubleshooting
 
 ### "Failed to fetch models" Error
-- Check if backend is running: `curl http://localhost:8080/api/agents/coding`
+- Check if backend is running: `curl https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io/api/agents/coding`
 - Verify you're logged in: Run `quantrel.diagnose`
 - Check Developer Console for detailed error logs
 

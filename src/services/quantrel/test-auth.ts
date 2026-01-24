@@ -38,7 +38,7 @@ async function testAuthentication() {
 	console.log("🧪 Testing Quantrel Authentication\n")
 
 	const mockStateManager = new MockStateManager() as any
-	const baseUrl = "http://localhost:8080"
+	const baseUrl = "https://quantrelbackend-3.lemonplant-1fe15edf.westus2.azurecontainerapps.io"
 
 	// Create auth service
 	const authService = new QuantrelAuthService(mockStateManager, baseUrl)
