@@ -61,6 +61,20 @@ export async function initialize(context: vscode.ExtensionContext): Promise<Webv
 		})
 	}
 
+	// Set Quantrel as default provider if no provider is configured
+	const stateManager = StateManager.get()
+	const planProvider = stateManager.getGlobalSettingsKey("planModeApiProvider")
+	const actProvider = stateManager.getGlobalSettingsKey("actModeApiProvider")
+
+	if (!planProvider) {
+		stateManager.setGlobalState("planModeApiProvider", "quantrel")
+		Logger.log("Initialized plan mode provider to Quantrel")
+	}
+	if (!actProvider) {
+		stateManager.setGlobalState("actModeApiProvider", "quantrel")
+		Logger.log("Initialized act mode provider to Quantrel")
+	}
+
 	// Initialize Quantrel authentication service
 	try {
 		const baseUrl = StateManager.get().getGlobalSettingsKey("quantrelBaseUrl") || "http://localhost:8080"

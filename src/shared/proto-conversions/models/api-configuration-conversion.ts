@@ -315,6 +315,8 @@ function convertApiProviderToProto(provider: string | undefined): ProtoApiProvid
 			return ProtoApiProvider.HICAP
 		case "nousResearch":
 			return ProtoApiProvider.NOUSRESEARCH
+		case "quantrel":
+			return ProtoApiProvider.QUANTREL
 		default:
 			return ProtoApiProvider.ANTHROPIC
 	}
@@ -403,6 +405,8 @@ export function convertProtoToApiProvider(provider: ProtoApiProvider): ApiProvid
 			return "minimax"
 		case ProtoApiProvider.NOUSRESEARCH:
 			return "nousResearch"
+		case ProtoApiProvider.QUANTREL:
+			return "quantrel"
 		default:
 			return "anthropic"
 	}

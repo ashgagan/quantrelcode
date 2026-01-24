@@ -134,9 +134,12 @@ export interface Settings {
 
 	// Quantrel settings
 	quantrelBaseUrl: string | undefined
+	quantrelUserId: string | undefined
 	quantrelUserEmail: string | undefined
 	quantrelSelectedModelId: number | undefined
 	quantrelSelectedModelName: string | undefined
+	planModeQuantrelModelId: string | undefined
+	actModeQuantrelModelId: string | undefined
 
 	// Model-specific settings
 	hicapModelId: string | undefined

@@ -32,28 +32,53 @@ export class QuantrelModelService {
 		const accessToken = this.stateManager.getSecretKey("quantrelAccessToken")
 
 		if (!accessToken) {
+			console.error("[Quantrel] No access token found")
 			throw new Error("Not authenticated. Please login to Quantrel first.")
 		}
 
+		console.log(`[Quantrel] Fetching agents from: ${this.baseUrl}/api/agents/coding`)
+
 		try {
-			const response = await fetch(`${this.baseUrl}/api/agents`, {
+			const response = await fetch(`${this.baseUrl}/api/agents/coding`, {
 				headers: {
 					Authorization: `Bearer ${accessToken}`,
 				},
 			})
 
+			console.log(`[Quantrel] Response status: ${response.status}`)
+
 			if (!response.ok) {
+				const errorText = await response.text()
+				console.error(`[Quantrel] Error response:`, errorText)
+
 				if (response.status === 401) {
 					throw new Error("Session expired. Please login again.")
 				}
-				throw new Error(`Failed to fetch agents: ${response.statusText}`)
+				if (response.status === 500) {
+					// Parse the error to give helpful feedback
+					try {
+						const errorJson = JSON.parse(errorText)
+						if (errorJson.error && errorJson.error.includes("NoSuchMethodError")) {
+							throw new Error(
+								"Backend error: The /api/agents/coding endpoint is not fully implemented. " +
+									"Please update the backend repository to implement the 'findAgentCapableModels' method.",
+							)
+						}
+					} catch (parseError) {
+						// If JSON parse fails, fall through to generic error
+					}
+				}
+				throw new Error(`Failed to fetch agents: ${response.status} ${response.statusText} - ${errorText}`)
 			}
 
 			this.cachedAgents = await response.json()
 			this.lastFetchTime = now
 
+			console.log(`[Quantrel] Successfully fetched ${this.cachedAgents.length} agents`)
+
 			return this.cachedAgents
 		} catch (error) {
+			console.error("[Quantrel] Fetch error:", error)
 			throw new Error(`Failed to fetch agents: ${error instanceof Error ? error.message : String(error)}`)
 		}
 	}
@@ -67,7 +92,7 @@ export class QuantrelModelService {
 			(agent) =>
 				agent.name.toLowerCase().includes(lowerQuery) ||
 				agent.publisher.toLowerCase().includes(lowerQuery) ||
-				agent.tags.some((tag) => tag.toLowerCase().includes(lowerQuery)) ||
+				agent.tags?.some((tag) => tag.toLowerCase().includes(lowerQuery)) ||
 				agent.modelId.toLowerCase().includes(lowerQuery),
 		)
 	}
@@ -76,7 +101,7 @@ export class QuantrelModelService {
 	 * Filter agents by capability score
 	 */
 	filterByCapability(capability: "reasoning" | "intelligence" | "speed", minScore: number): QuantrelAgent[] {
-		return this.cachedAgents.filter((agent) => agent[capability] >= minScore)
+		return this.cachedAgents.filter((agent) => (agent[capability] ?? 0) >= minScore)
 	}
 
 	/**
@@ -90,7 +115,7 @@ export class QuantrelModelService {
 	 * Filter agents by tags
 	 */
 	filterByTags(tags: string[]): QuantrelAgent[] {
-		return this.cachedAgents.filter((agent) => tags.some((tag) => agent.tags.includes(tag)))
+		return this.cachedAgents.filter((agent) => tags.some((tag) => agent.tags?.includes(tag)))
 	}
 
 	/**
@@ -124,7 +149,7 @@ export class QuantrelModelService {
 	 */
 	sortByCapability(capability: "reasoning" | "intelligence" | "speed", agents?: QuantrelAgent[]): QuantrelAgent[] {
 		const toSort = agents || this.cachedAgents
-		return [...toSort].sort((a, b) => b[capability] - a[capability])
+		return [...toSort].sort((a, b) => (b[capability] ?? 0) - (a[capability] ?? 0))
 	}
 
 	/**
@@ -134,22 +159,22 @@ export class QuantrelModelService {
 		return this.cachedAgents
 			.filter(
 				(agent) =>
-					agent.intelligence >= 7 &&
-					agent.reasoning >= 7 &&
-					(agent.tags.includes("coding") ||
-						agent.tags.includes("programming") ||
+					(agent.intelligence ?? 0) >= 7 &&
+					(agent.reasoning ?? 0) >= 7 &&
+					(agent.tags?.includes("coding") ||
+						agent.tags?.includes("programming") ||
 						agent.name.toLowerCase().includes("code") ||
 						agent.name.toLowerCase().includes("claude") ||
 						agent.name.toLowerCase().includes("gpt")),
 			)
-			.sort((a, b) => b.intelligence - a.intelligence)
+			.sort((a, b) => (b.intelligence ?? 0) - (a.intelligence ?? 0))
 	}
 
 	/**
 	 * Get fastest agents (good for quick queries)
 	 */
 	getFastestAgents(minSpeed: number = 7): QuantrelAgent[] {
-		return this.cachedAgents.filter((agent) => agent.speed >= minSpeed).sort((a, b) => b.speed - a.speed)
+		return this.cachedAgents.filter((agent) => (agent.speed ?? 0) >= minSpeed).sort((a, b) => (b.speed ?? 0) - (a.speed ?? 0))
 	}
 
 	/**
@@ -157,8 +182,8 @@ export class QuantrelModelService {
 	 */
 	getMostIntelligent(minIntelligence: number = 8): QuantrelAgent[] {
 		return this.cachedAgents
-			.filter((agent) => agent.intelligence >= minIntelligence)
-			.sort((a, b) => b.intelligence - a.intelligence)
+			.filter((agent) => (agent.intelligence ?? 0) >= minIntelligence)
+			.sort((a, b) => (b.intelligence ?? 0) - (a.intelligence ?? 0))
 	}
 
 	/**
@@ -210,7 +235,7 @@ export class QuantrelModelService {
 	 * Get all unique tags
 	 */
 	getTags(): string[] {
-		const tags = new Set(this.cachedAgents.flatMap((agent) => agent.tags))
+		const tags = new Set(this.cachedAgents.flatMap((agent) => agent.tags ?? []))
 		return Array.from(tags).sort()
 	}
 }

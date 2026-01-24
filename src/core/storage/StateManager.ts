@@ -1347,6 +1347,13 @@ export class StateManager {
 			geminiActModeThinkingLevel:
 				this.taskStateCache["geminiActModeThinkingLevel"] || this.globalStateCache["geminiActModeThinkingLevel"],
 			nousResearchApiKey: this.secretsCache["nousResearchApiKey"],
+			quantrelAccessToken: this.secretsCache["quantrelAccessToken"],
+			quantrelBaseUrl: this.taskStateCache["quantrelBaseUrl"] || this.globalStateCache["quantrelBaseUrl"],
+			quantrelUserId: this.taskStateCache["quantrelUserId"] || this.globalStateCache["quantrelUserId"],
+			planModeQuantrelModelId:
+				this.taskStateCache["planModeQuantrelModelId"] || this.globalStateCache["planModeQuantrelModelId"],
+			actModeQuantrelModelId:
+				this.taskStateCache["actModeQuantrelModelId"] || this.globalStateCache["actModeQuantrelModelId"],
 		}
 	}
 }

@@ -42,10 +42,23 @@ export const useApiConfigurationHandlers = () => {
 	 * @param updates - An object containing the fields to update and their new values
 	 */
 	const handleFieldsChange = async (updates: Partial<ApiConfiguration>) => {
+		console.log("[useApiConfigurationHandlers] handleFieldsChange:", {
+			updates,
+			currentApiConfig: {
+				planModeApiProvider: apiConfiguration?.planModeApiProvider,
+				actModeApiProvider: apiConfiguration?.actModeApiProvider,
+			},
+		})
+
 		const updatedConfig = {
 			...apiConfiguration,
 			...updates,
 		}
+
+		console.log("[useApiConfigurationHandlers] Final config being sent:", {
+			planModeApiProvider: updatedConfig.planModeApiProvider,
+			actModeApiProvider: updatedConfig.actModeApiProvider,
+		})
 
 		const protoConfig = convertApiConfigurationToProto(updatedConfig)
 		await ModelsServiceClient.updateApiConfigurationProto(
@@ -60,10 +73,19 @@ export const useApiConfigurationHandlers = () => {
 		value: ApiConfiguration[PlanK] & ApiConfiguration[ActK], // Intersection ensures value is compatible with both field types
 		currentMode: Mode,
 	) => {
+		console.log("[useApiConfigurationHandlers] handleModeFieldChange:", {
+			fieldPair,
+			value,
+			currentMode,
+			planActSeparateModelsSetting,
+		})
+
 		if (planActSeparateModelsSetting) {
 			const targetField = fieldPair[currentMode]
+			console.log("[useApiConfigurationHandlers] Updating only:", targetField)
 			await handleFieldChange(targetField, value)
 		} else {
+			console.log("[useApiConfigurationHandlers] Updating both plan and act modes")
 			await handleFieldsChange({
 				[fieldPair.plan]: value,
 				[fieldPair.act]: value,

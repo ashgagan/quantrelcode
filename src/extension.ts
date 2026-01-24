@@ -449,6 +449,13 @@ export async function activate(context: vscode.ExtensionContext) {
 					const result = await authService.login(email, password)
 					if (result.success) {
 						const userInfo = await authService.getUserInfo()
+
+						// Extract userId from sub field (format: "user:{userId}")
+						if (userInfo?.sub) {
+							const userId = userInfo.sub.replace("user:", "")
+							webview.controller.stateManager.setGlobalState("quantrelUserId", userId)
+						}
+
 						vscode.window.showInformationMessage(`Logged in to Quantrel as ${userInfo?.email || email}`)
 						// Update status bar
 						getQuantrelStatusBar()?.update()
@@ -516,7 +523,11 @@ export async function activate(context: vscode.ExtensionContext) {
 				})
 
 				if (selected) {
-					// Store selected model
+					// Store selected model - use modelId (e.g., "anthropic/claude-3-5-sonnet") for API requests
+					const currentMode = webview.controller.stateManager.getGlobalSettingsKey("mode") || "act"
+					const modeKey = currentMode === "plan" ? "planModeQuantrelModelId" : "actModeQuantrelModelId"
+
+					webview.controller.stateManager.setGlobalState(modeKey, selected.agent.modelId)
 					webview.controller.stateManager.setGlobalState("quantrelSelectedModelId", selected.agent.id)
 					webview.controller.stateManager.setGlobalState("quantrelSelectedModelName", selected.agent.name)
 
@@ -562,6 +573,11 @@ export async function activate(context: vscode.ExtensionContext) {
 					`Failed to refresh models: ${error instanceof Error ? error.message : String(error)}`,
 				)
 			}
+		}),
+
+		vscode.commands.registerCommand("quantrel.diagnose", async () => {
+			const { diagnoseQuantrelSetup } = await import("./services/quantrel/diagnose")
+			await diagnoseQuantrelSetup(webview.controller.stateManager)
 		}),
 	)
 

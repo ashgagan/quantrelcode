@@ -120,10 +120,11 @@ export class QuantrelAuthService {
 			}
 		}
 
-		// Clear stored tokens
+		// Clear stored tokens and user info
 		this.stateManager.setSecret("quantrelAccessToken", undefined)
 		this.stateManager.setSecret("quantrelRefreshToken", undefined)
 		this.stateManager.setGlobalState("quantrelUserEmail", undefined)
+		this.stateManager.setGlobalState("quantrelUserId", undefined)
 	}
 
 	/**

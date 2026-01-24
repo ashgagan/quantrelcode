@@ -31,6 +31,7 @@ import { OllamaHandler } from "./providers/ollama"
 import { OpenAiHandler } from "./providers/openai"
 import { OpenAiNativeHandler } from "./providers/openai-native"
 import { OpenRouterHandler } from "./providers/openrouter"
+import { QuantrelHandler } from "./providers/quantrel"
 import { QwenHandler } from "./providers/qwen"
 import { QwenCodeHandler } from "./providers/qwen-code"
 import { RequestyHandler } from "./providers/requesty"
@@ -429,6 +430,14 @@ function createHandlerForProvider(
 				onRetryAttempt: options.onRetryAttempt,
 				nousResearchApiKey: options.nousResearchApiKey,
 				apiModelId: mode === "plan" ? options.planModeNousResearchModelId : options.actModeNousResearchModelId,
+			})
+		case "quantrel":
+			return new QuantrelHandler({
+				onRetryAttempt: options.onRetryAttempt,
+				quantrelAccessToken: options.quantrelAccessToken,
+				quantrelBaseUrl: options.quantrelBaseUrl,
+				quantrelModelId: mode === "plan" ? options.planModeQuantrelModelId : options.actModeQuantrelModelId,
+				quantrelUserId: options.quantrelUserId,
 			})
 		default:
 			return new AnthropicHandler({

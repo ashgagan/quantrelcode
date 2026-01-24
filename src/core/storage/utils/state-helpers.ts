@@ -536,6 +536,11 @@ export async function readGlobalStateFromDisk(context: ExtensionContext): Promis
 			context.globalState.get<GlobalStateAndSettings["quantrelSelectedModelId"]>("quantrelSelectedModelId")
 		const quantrelSelectedModelName =
 			context.globalState.get<GlobalStateAndSettings["quantrelSelectedModelName"]>("quantrelSelectedModelName")
+		const quantrelUserId = context.globalState.get<GlobalStateAndSettings["quantrelUserId"]>("quantrelUserId")
+		const planModeQuantrelModelId =
+			context.globalState.get<GlobalStateAndSettings["planModeQuantrelModelId"]>("planModeQuantrelModelId")
+		const actModeQuantrelModelId =
+			context.globalState.get<GlobalStateAndSettings["actModeQuantrelModelId"]>("actModeQuantrelModelId")
 
 		return {
 			// api configuration fields
@@ -732,9 +737,12 @@ export async function readGlobalStateFromDisk(context: ExtensionContext): Promis
 			remoteWorkflowToggles: remoteWorkflowToggles || {},
 			// Quantrel settings
 			quantrelBaseUrl,
+			quantrelUserId,
 			quantrelUserEmail,
 			quantrelSelectedModelId,
 			quantrelSelectedModelName,
+			planModeQuantrelModelId,
+			actModeQuantrelModelId,
 		}
 	} catch (error) {
 		console.error("[StateHelpers] Failed to read global state:", error)

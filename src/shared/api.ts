@@ -42,6 +42,7 @@ export type ApiProvider =
 	| "minimax"
 	| "hicap"
 	| "nousResearch"
+	| "quantrel"
 
 export interface ApiHandlerSecrets {
 	apiKey?: string // anthropic
@@ -86,6 +87,7 @@ export interface ApiHandlerSecrets {
 	minimaxApiKey?: string
 	hicapApiKey?: string
 	nousResearchApiKey?: string
+	quantrelAccessToken?: string
 }
 
 export interface ApiHandlerOptions {
@@ -137,6 +139,8 @@ export interface ApiHandlerOptions {
 	ocaMode?: string
 	aihubmixBaseUrl?: string
 	aihubmixAppCode?: string
+	quantrelBaseUrl?: string
+	quantrelUserId?: string
 
 	// Plan mode configurations
 	planModeApiModelId?: string
@@ -176,6 +180,7 @@ export interface ApiHandlerOptions {
 	planModeHicapModelId?: string
 	planModeHicapModelInfo?: ModelInfo
 	planModeNousResearchModelId?: string
+	planModeQuantrelModelId?: string
 	// Act mode configurations
 
 	// Act mode configurations
@@ -216,6 +221,7 @@ export interface ApiHandlerOptions {
 	actModeHicapModelId?: string
 	actModeHicapModelInfo?: ModelInfo
 	actModeNousResearchModelId?: string
+	actModeQuantrelModelId?: string
 }
 
 export type ApiConfiguration = ApiHandlerOptions &

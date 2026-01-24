@@ -146,6 +146,7 @@ export function getModelsForProvider(
 		case "oca":
 		case "aihubmix":
 		case "together":
+		case "quantrel":
 		default:
 			return undefined
 	}
@@ -168,7 +169,15 @@ export function normalizeApiConfiguration(
 	currentMode: Mode,
 ): NormalizedApiConfig {
 	const provider =
-		(currentMode === "plan" ? apiConfiguration?.planModeApiProvider : apiConfiguration?.actModeApiProvider) || "anthropic"
+		(currentMode === "plan" ? apiConfiguration?.planModeApiProvider : apiConfiguration?.actModeApiProvider) || "quantrel"
+
+	// Debug logging
+	console.log("[providerUtils] normalizeApiConfiguration:", {
+		currentMode,
+		planModeApiProvider: apiConfiguration?.planModeApiProvider,
+		actModeApiProvider: apiConfiguration?.actModeApiProvider,
+		selectedProvider: provider,
+	})
 
 	const modelId = currentMode === "plan" ? apiConfiguration?.planModeApiModelId : apiConfiguration?.actModeApiModelId
 
@@ -478,8 +487,39 @@ export function normalizeApiConfiguration(
 						? nousResearchModels[nousResearchModelId as keyof typeof nousResearchModels]
 						: nousResearchModels[nousResearchDefaultModelId],
 			}
+		case "quantrel":
+			const quantrelModelId =
+				currentMode === "plan" ? apiConfiguration?.planModeQuantrelModelId : apiConfiguration?.actModeQuantrelModelId
+			return {
+				selectedProvider: provider,
+				selectedModelId: quantrelModelId || "anthropic/claude-3-5-sonnet",
+				selectedModelInfo: {
+					maxTokens: 8192,
+					contextWindow: 200000,
+					supportsImages: false,
+					supportsPromptCache: false,
+					inputPrice: 0.003,
+					outputPrice: 0.015,
+					description: "Quantrel - Dynamic model selection from marketplace",
+				},
+			}
 		default:
-			return getProviderData(anthropicModels, anthropicDefaultModelId)
+			// Default to Quantrel
+			const defaultModelId =
+				currentMode === "plan" ? apiConfiguration?.planModeQuantrelModelId : apiConfiguration?.actModeQuantrelModelId
+			return {
+				selectedProvider: "quantrel",
+				selectedModelId: defaultModelId || "anthropic/claude-3-5-sonnet",
+				selectedModelInfo: {
+					maxTokens: 8192,
+					contextWindow: 200000,
+					supportsImages: false,
+					supportsPromptCache: false,
+					inputPrice: 0.003,
+					outputPrice: 0.015,
+					description: "Quantrel - Dynamic model selection from marketplace",
+				},
+			}
 	}
 }
 

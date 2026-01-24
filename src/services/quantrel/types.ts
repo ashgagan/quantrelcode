@@ -14,12 +14,13 @@ export interface QuantrelAgent {
 	inputPrice: number // Per 1M tokens
 	outputPrice: number // Per 1M tokens
 	contextWindow: number
-	inputTypes: string[]
-	outputTypes: string[]
-	tags: string[]
-	reasoning: number // 0-10 score
-	intelligence: number // 0-10 score
-	speed: number // 0-10 score
+	supportsAgent?: boolean // Whether model supports agent actions
+	inputTypes?: string[]
+	outputTypes?: string[]
+	tags?: string[]
+	reasoning?: number // 0-10 score
+	intelligence?: number // 0-10 score
+	speed?: number // 0-10 score
 }
 
 /**
